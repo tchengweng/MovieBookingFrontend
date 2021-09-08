@@ -1,0 +1,11 @@
+.card {
+  border-radius: 6px;
+  background-color: rgb(255, 255, 255);
+  padding: 1rem; 
+  /* width: 100%; */
+
+  margin: 3rem auto;
+  width: 90%;
+  max-width: 80rem;
+  text-align: center;
+}

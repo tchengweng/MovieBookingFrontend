@@ -1,53 +1,35 @@
-import React, { useEffect, useCallback } from "react";
-// import React, { useState, useEffect, useCallback } from "react";
-import "./App.css";
+import React, { Suspense } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
+
+import Layout from "./components/Layout/Layout";
+import LoadingSpinner from "./components/UI/LoadingSpinner";
+import AllMovies from "./pages/AllMovies";
+import InvalidPath from "./pages/InvalidPath";
 
 function App() {
-  // const [movies, setMovies] = useState([]);
-
-  const fetchMoviesHandler = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/AllMovies",
-        {
-          method: "GET",
-          mode: 'cors',
-          headers: {
-            "Content-Type": "application/json",
-          },
+  return (
+    <Layout>
+      <Suspense
+        fallback={
+          <div className="centered">
+            <LoadingSpinner></LoadingSpinner>
+          </div>
         }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-  
-      const data = await response.json();
-
-      console.log(data);
-  
-      // const loadedMovies = [];
-  
-      // for (const key in data) {
-      //   loadedMovies.push({
-      //     id: key,
-      //     title: data[key].title,
-      //     openingText: data[key].openingText,
-      //     releaseDate: data[key].releaseDate,
-      //   });
-      // }
-  
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-  
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, [fetchMoviesHandler]);
-
-  return <div className="App">Test app</div>;
+      >
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/AllMovies"></Redirect>
+          </Route>
+          <Route path="/AllMovies" exact>
+            <AllMovies />
+          </Route>
+          <Route path="*">
+            <InvalidPath></InvalidPath>
+          </Route>
+        </Switch>
+      </Suspense>
+    </Layout>
+  );
 }
 
 export default App;
-
-
