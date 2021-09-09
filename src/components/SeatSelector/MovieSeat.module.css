@@ -1,0 +1,30 @@
+.seatEmpty {
+    border:2px solid black;
+    vertical-align:middle;
+    margin:5px 5px;
+}
+
+.seatEmpty:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+.seatSel {
+    border:2px solid black;
+    vertical-align:middle;
+    margin:5px 5px;
+    background: #5aff44;
+}
+
+.seatSel:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+
+.seatRes {
+    border:2px solid black;
+    vertical-align:middle;
+    margin:5px 5px;
+    background: #4b4b4b;
+  }

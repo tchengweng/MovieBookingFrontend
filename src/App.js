@@ -3,8 +3,10 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-import AllMovies from "./pages/AllMovies";
-import InvalidPath from "./pages/InvalidPath";
+
+const AllMovies = React.lazy(() => import("./pages/AllMovies"));
+const InvalidPath = React.lazy(() => import("./pages/InvalidPath"));
+const Screenings = React.lazy(() => import("./pages/Screenings"));
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
           </Route>
           <Route path="/AllMovies" exact>
             <AllMovies />
+          </Route>
+          <Route path="/AllMovies/:screeningId" exact>
+            <Screenings />
           </Route>
           <Route path="*">
             <InvalidPath></InvalidPath>

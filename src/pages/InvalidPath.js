@@ -1,7 +1,11 @@
+import Card from "../components/UI/Card";
+
 const InvalidPath = () => {
-    return <div className='centered'>
-        <p>Page not found!</p>
-    </div>
-}
+  return (
+    <Card className="centered">
+      <p>Page not found!</p>
+    </Card>
+  );
+};
 
 export default InvalidPath;

@@ -1,12 +1,16 @@
 import React, { Fragment, useState, useCallback, useEffect } from "react";
 import MovieSldier from "../components/Movie/MovieSlider";
 import MovieDetails from "../components/Movie/MovieDetails";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const AllMovies = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [currMovId, setCurrMovId] = useState(0);
+  const [isMoviesLoaded, setIsMoviesLoaded] = useState(false);
+
   const [screenings, setScreenings] = useState([]);
+  const [isScreeningsLoaded, setIsScreeningsLoaded] = useState(false);
+
+  const [currMovId, setCurrMovId] = useState(0);
 
   const fetchMoviesHandler = useCallback(async () => {
     try {
@@ -25,8 +29,8 @@ const AllMovies = () => {
 
       const data = await response.json();
 
-      console.log(data);
-      console.log(data.payload);
+      // console.log(data);
+      // console.log(data.payload);
 
       const loadedMovies = [];
 
@@ -40,11 +44,11 @@ const AllMovies = () => {
         });
       }
 
-      console.log(loadedMovies);
+      // console.log(loadedMovies);
       setMovies(loadedMovies);
-      setIsLoaded(true);
+      setIsMoviesLoaded(true);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, []);
 
@@ -65,8 +69,8 @@ const AllMovies = () => {
 
       const data = await response.json();
 
-      console.log(data);
-      console.log(data.payload);
+      // console.log(data);
+      // console.log(data.payload);
 
       const loadedScreenings = [];
 
@@ -81,10 +85,11 @@ const AllMovies = () => {
         });
       }
 
-      console.log(loadedScreenings);
+      // console.log(loadedScreenings);
       setScreenings(loadedScreenings);
+      setIsScreeningsLoaded(true);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, []);
 
@@ -93,22 +98,23 @@ const AllMovies = () => {
     fetchScreeningsHandler();
   }, [fetchMoviesHandler, fetchScreeningsHandler]);
 
-  //   <div>
-  //   <Card>
-  //     <h1>Active movie id: {props.movies[currMovId].id}</h1>
-  //     <h1>Active movie title: {props.movies[currMovId].title}</h1>
-  //   </Card>
-  // </div>
+  if (!isMoviesLoaded || !isScreeningsLoaded) {
+    return (
+      <div className="centered">
+        <LoadingSpinner></LoadingSpinner>
+      </div>
+    );
+  }
 
   return (
     <Fragment>
       <MovieSldier
-        isLoaded={isLoaded}
+        isLoaded={isMoviesLoaded}
         movies={movies}
         setCurrMovId={setCurrMovId}
       ></MovieSldier>
       <MovieDetails
-        isLoaded={isLoaded}
+        isLoaded={isScreeningsLoaded}
         movies={movies}
         currMovId={currMovId}
         screenings={screenings}
