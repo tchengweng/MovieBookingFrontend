@@ -42,7 +42,7 @@ const CreateLink = (reserveSeatStatus) => {
       <h2>{msg}</h2>
       <p></p>
       <Link
-        className={linkClasses.Link}
+        className={linkClasses.Link2}
         style={{ textDecoration: "none" }}
         to={`/AllMovies`}
       >

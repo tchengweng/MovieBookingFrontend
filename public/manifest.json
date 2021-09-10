@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Movie Booking App CW",
+  "name": "Simple application using React.js as frontend, SpringBoot as backend and MongoDB as database.",
   "icons": [
     {
       "src": "favicon.ico",

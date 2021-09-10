@@ -63,6 +63,7 @@ const MovieDetails = (props) => {
             >
               Book Tickets
             </Link>
+            <p></p>
           </li>
         );
       });

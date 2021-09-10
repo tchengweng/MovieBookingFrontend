@@ -1,6 +1,6 @@
 .li {
     border-radius: 2px;
-    background-color: rgb(212, 105, 105);
+    background-color: #E30611;
     padding: 1rem; 
 
     margin: 3rem auto;
@@ -9,20 +9,4 @@
     text-align: center;
 
     list-style-type: none;
-}
-
-.Link{
-    color: white;
-    cursor: pointer;
-    font: inherit;
-    border: none;
-    background-color: #b64545;
-    padding: 0.55rem 3rem;
-    border-radius: 25px;
-    font-weight: bold;
-}
-
-.Link:hover,
-.Link:active {
-  background-color: #2c0d00;
 }

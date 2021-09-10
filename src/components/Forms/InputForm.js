@@ -42,7 +42,9 @@ const InputForm = (props) => {
   return (
     <form onSubmit={formSubmissionHandler} className={classes.form}>
       <div>
-        <label htmlFor="name">Name: </label>
+        <label className={classes.label} htmlFor="name">
+          Name:{" "}
+        </label>
         <input
           type="text"
           id="name"
@@ -52,11 +54,13 @@ const InputForm = (props) => {
         />
         <p></p>
         {nameInputHasError && (
-          <p className="error-text">Name must not be empty.</p>
+          <p className={classes.p}>Name must not be empty.</p>
         )}
       </div>
       <div>
-        <label htmlFor="name">E-Mail Address: </label>
+        <label className={classes.label} htmlFor="email">
+          E-Mail Address:{" "}
+        </label>
         <input
           type="email"
           id="email"
@@ -65,9 +69,9 @@ const InputForm = (props) => {
           value={enteredEmail}
         />
         <p></p>
-        {emailInputHasError && <p className="error-text">Email is invalid.</p>}
+        {emailInputHasError && <p className={classes.p}>Email is invalid.</p>}
       </div>
-      <div className="form-actions">
+      <div>
         <p></p>
         <button className={classes.button} disabled={!formIsValid}>
           Submit
