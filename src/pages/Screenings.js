@@ -1,10 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect,useContext } from "react";
 import Card from "../components/UI/Card";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import MovieSeatSelector from "../components/SeatSelector/MovieSeatSelector";
+import { sendRequestPOST } from "../components/Requests/RequestAPIs";
+import { useHistory } from 'react-router';
+import SeatContext from "../components/Store/Seat-context";
 
 const Screenings = (props) => {
+  //Get screening id
   const params = useParams();
   const { screeningId } = params;
 
@@ -14,70 +18,69 @@ const Screenings = (props) => {
   const [hallDetails, setHallDetails] = useState([]);
   const [isHallDetailsLoaded, setIsHallDetailsLoaded] = useState(false);
 
+  const seatCtx = useContext(SeatContext);
+
+  const history = useHistory();
+
+  //Fetch screening and hall details
   const fetchScreeningDetails = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/ScreeningById",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            screeningId: screeningId,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
+    let requestBody = { screeningId: screeningId };
+    let returnData = await sendRequestPOST(
+      "https://movie-booking-backend-cw.herokuapp.com/ScreeningById",
+      requestBody
+    );
+
+    if (returnData !== "Error") {
+      if (returnData.status !== "query success") {
+        history.push({
+          pathname: "/AllMovies"
+        });
+      } else {
+        console.log(returnData.payload);
+        setScreening(returnData.payload);
+        setIsScreeningLoaded(true);
       }
-
-      const data = await response.json();
-      console.log(data.payload);
-
-      setScreening(data.payload);
-      setIsScreeningLoaded(true);
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log("Error!");
     }
-  }, [screeningId]);
+  }, [screeningId,history]);
 
   const fetchHallDetails = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/HallByScreeningId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            screeningId: screeningId,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
+    let requestBody = { screeningId: screeningId };
+    let returnData = await sendRequestPOST(
+      "https://movie-booking-backend-cw.herokuapp.com/HallByScreeningId",
+      requestBody
+    );
+
+    console.log(returnData);
+
+    if (returnData !== "Error") {
+      if (returnData.status !== "query success") {
+        history.push({
+          pathname: "/AllMovies"
+        });
+      } else {
+        console.log(returnData.payload);
+        setHallDetails(returnData.payload);
+        setIsHallDetailsLoaded(true);
       }
-
-      const data = await response.json();
-      console.log(data.payload);
-
-      setHallDetails(data.payload);
-      setIsHallDetailsLoaded(true);
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log("Error!");
     }
-  }, [screeningId]);
+  }, [screeningId,history]);
 
+
+  //Load initial data
   useEffect(() => {
     setIsScreeningLoaded(false);
     setIsHallDetailsLoaded(false);
     fetchScreeningDetails();
     fetchHallDetails();
+    seatCtx.clearSeats();
     console.log("gettinging movie details!");
-  }, [fetchScreeningDetails, fetchHallDetails]);
+  }, [fetchScreeningDetails, fetchHallDetails,seatCtx]);
 
+  //Display loading spinner if data is not fully loaded
   if (!isScreeningLoaded || !isHallDetailsLoaded) {
     return (
       <div className="centered">

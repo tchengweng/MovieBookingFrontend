@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
+import Reserve from "./pages/Reserve";
 
 const AllMovies = React.lazy(() => import("./pages/AllMovies"));
 const InvalidPath = React.lazy(() => import("./pages/InvalidPath"));
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/AllMovies/:screeningId" exact>
             <Screenings />
+          </Route>
+          <Route path="/Reserve" exact>
+            <Reserve />
           </Route>
           <Route path="*">
             <InvalidPath></InvalidPath>

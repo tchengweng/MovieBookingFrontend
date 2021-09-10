@@ -1,7 +1,9 @@
-import React, { Fragment, useState, useCallback, useEffect } from "react";
+import React, { Fragment, useState, useCallback, useEffect,useContext } from "react";
 import MovieSldier from "../components/Movie/MovieSlider";
 import MovieDetails from "../components/Movie/MovieDetails";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
+import { sendRequestGET } from "../components/Requests/RequestAPIs";
+import SeatContext from "../components/Store/Seat-context";
 
 const AllMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -12,91 +14,63 @@ const AllMovies = () => {
 
   const [currMovId, setCurrMovId] = useState(0);
 
+  const seatCtx = useContext(SeatContext);
+
   const fetchMoviesHandler = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/AllMovies",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-
-      // console.log(data);
-      // console.log(data.payload);
-
+    let returnData = await sendRequestGET(
+      "https://movie-booking-backend-cw.herokuapp.com/AllMovies",
+    );
+    if (returnData !== "Error") {
       const loadedMovies = [];
-
-      for (const index in data.payload) {
+      for (const index in returnData.payload) {
         loadedMovies.push({
-          id: data.payload[index].id,
-          title: data.payload[index].name,
-          description: data.payload[index].description,
-          length: data.payload[index].length,
-          imageUrl: data.payload[index].imageUrl,
+          id: returnData.payload[index].id,
+          title: returnData.payload[index].name,
+          description: returnData.payload[index].description,
+          length: returnData.payload[index].length,
+          imageUrl: returnData.payload[index].imageUrl,
         });
       }
-
       // console.log(loadedMovies);
       setMovies(loadedMovies);
       setIsMoviesLoaded(true);
-    } catch (error) {
-      // console.log(error);
+    } else {
+      console.log("Error!");
     }
   }, []);
 
   const fetchScreeningsHandler = useCallback(async () => {
-    try {
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/AllScreenings",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
 
-      const data = await response.json();
-
-      // console.log(data);
-      // console.log(data.payload);
-
+    let returnData = await sendRequestGET(
+      "https://movie-booking-backend-cw.herokuapp.com/AllScreenings",
+    );
+    if (returnData !== "Error") {
       const loadedScreenings = [];
 
-      for (const index in data.payload) {
+      for (const index in returnData.payload) {
         loadedScreenings.push({
-          id: data.payload[index].id,
-          movieId: data.payload[index].movieId,
-          hallId: data.payload[index].hallId,
-          startTime: data.payload[index].startTime,
-          endTime: data.payload[index].endTime,
-          seatStatus: data.payload[index].seatStatus,
+          id: returnData.payload[index].id,
+          movieId: returnData.payload[index].movieId,
+          hallId: returnData.payload[index].hallId,
+          startTime: returnData.payload[index].startTime,
+          endTime: returnData.payload[index].endTime,
+          seatStatus: returnData.payload[index].seatStatus,
         });
       }
-
       // console.log(loadedScreenings);
       setScreenings(loadedScreenings);
       setIsScreeningsLoaded(true);
-    } catch (error) {
-      // console.log(error);
+    } else {
+      console.log("Error!");
     }
   }, []);
 
   useEffect(() => {
     fetchMoviesHandler();
     fetchScreeningsHandler();
-  }, [fetchMoviesHandler, fetchScreeningsHandler]);
+    seatCtx.clearSeats();
+    console.log(seatCtx);
+  }, [fetchMoviesHandler, fetchScreeningsHandler,seatCtx]);
 
   if (!isMoviesLoaded || !isScreeningsLoaded) {
     return (

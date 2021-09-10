@@ -1,5 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState,useContext } from "react";
 import MovieSeat from "./MovieSeat";
+import { useHistory } from 'react-router';
+import SeatContext from "../Store/Seat-context";
 
 const GetSeatMatrix = (hallDetails) => {
   let seatIds = Array.from(Array(hallDetails.seatCapacity).keys());
@@ -12,57 +14,39 @@ const GetSeatMatrix = (hallDetails) => {
 };
 
 const MovieSeatSelector = (props) => {
-  const [seatsChosen, setSeatsChosen] = useState([]);
+  const history = useHistory();
+  const seatCtx = useContext(SeatContext);
 
+  const [seatsChosen, setSeatsChosen] = useState([]);
   const seatsMatrix = GetSeatMatrix(props.hallDetails);
 
   const setSeatHandler = (seatId) => {
     console.log(seatId);
     const isSelected = seatsChosen.includes(seatId);
     if (isSelected) {
-      setSeatsChosen(
-        seatsChosen.filter((selectedSeat) => selectedSeat !== seatId)
-      );
+      setSeatsChosen(seatsChosen.filter(
+        (selectedSeat) => selectedSeat !== seatId
+      ));
     } else {
       setSeatsChosen([...seatsChosen, seatId]);
     }
   };
 
-  const sendReserveSeatsRequest = useCallback(async () => {
-    try {
-      const jsonBody = JSON.stringify({
-        name: "tcw",
-        email: "tcwcheng@hotmail.com",
-        seats: seatsChosen,
-        screeningId: props.screeningDetails.id,
-      });
-
-      console.log(jsonBody);
-
-      const response = await fetch(
-        "https://movie-booking-backend-cw.herokuapp.com/ReserveSeats",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: jsonBody,
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [props.screeningDetails.id, seatsChosen]);
-
-  const submitForm = () => {
-    sendReserveSeatsRequest();
+  const reserveSeatHandler = () => {
+    seatCtx.seats = seatsChosen;
+    seatCtx.screeningId = props.screeningDetails.id;
+    history.push({
+      pathname: "/Reserve",
+    });
+    //sendReserveSeatsRequest(name, email);
   };
+
+  let seatsChosenSorted = seatsChosen
+    .map(function (x) {
+      return parseInt(x + 1);
+    })
+    .sort((a, b) => a - b)
+    .toString();
 
   return (
     <div>
@@ -97,14 +81,8 @@ const MovieSeatSelector = (props) => {
       </div>
       {seatsChosen.length > 0 && (
         <div>
-          <p>
-            {seatsChosen
-              .map(function (x) {
-                return parseInt(x + 1);
-              })
-              .toString()}
-          </p>
-          <button onClick={submitForm}>submit</button>
+          <p>{seatsChosenSorted}</p>
+          <button onClick={reserveSeatHandler}>submit</button>
         </div>
       )}
     </div>
