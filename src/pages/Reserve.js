@@ -7,6 +7,7 @@ import { Fragment } from "react/cjs/react.production.min";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
+import linkClasses from "../components/CommonStyles/link.module.css";
 
 const ReserveSeatStatus = {
   RESERVED: "RESERVED",
@@ -37,10 +38,17 @@ const CreateLink = (reserveSeatStatus) => {
 
   return (
     <Fragment>
-      <p>{msg}</p>
-      <button>
-        <Link to={`/AllMovies`}>{linkMsg}</Link>
-      </button>
+      <p></p>
+      <h2>{msg}</h2>
+      <p></p>
+      <Link
+        className={linkClasses.Link}
+        style={{ textDecoration: "none" }}
+        to={`/AllMovies`}
+      >
+        {linkMsg}
+      </Link>
+      <p></p>
     </Fragment>
   );
 };
@@ -53,14 +61,19 @@ const Reserve = (props) => {
   const history = useHistory();
 
   const seatCtx = useContext(SeatContext);
-  const seatsChosen = seatCtx.seats;
-  const screeningId = seatCtx.screeningId;
+  const {
+    screeningId,
+    seats: seatsChosen,
+    movieName,
+    hallName,
+    dateAndTimeInfoStr,
+  } = seatCtx;
 
   console.log(seatCtx);
 
   if (seatsChosen === [] || screeningId === "") {
     history.push({
-      pathname: "/AllMovies"
+      pathname: "/AllMovies",
     });
   }
 
@@ -119,9 +132,13 @@ const Reserve = (props) => {
     <Card>
       {!submitedForm && (
         <Fragment>
-          <div>Reserve Seats</div>
-          <div>Screening Id: {screeningId}</div>
-          <div>Seats: {seatsChosenSorted}</div>
+          <h1>Reserve Seats</h1>
+          <h3>{movieName}</h3>
+          <h3>Hall: {hallName}</h3>
+          <h3>{dateAndTimeInfoStr}</h3>
+          <h3>Seats: {seatsChosenSorted}</h3>
+          <br></br>
+          <h2>Fill in your details.</h2>
           <InputForm submitFormHandler={submitForm}></InputForm>
         </Fragment>
       )}

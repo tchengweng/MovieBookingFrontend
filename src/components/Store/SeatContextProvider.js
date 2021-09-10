@@ -5,7 +5,7 @@ const defaultSeatState = {
     screeningId: "",
     movieName: "",
     hallName: "",
-    startDate: 0,
+    dateAndTimeInfoStr: "",
 };
 
 const SeatContextProvider = (props) => {
@@ -14,7 +14,7 @@ const SeatContextProvider = (props) => {
     seatContext.screeningId = defaultSeatState.screeningId;
     seatContext.movieName = defaultSeatState.movieName;
     seatContext.hallName = defaultSeatState.hallName;
-    seatContext.startDate = 0;
+    seatContext.dateAndTimeInfoStr = defaultSeatState.dateAndTimeInfoStr;
   }
 
   const seatContext = {
@@ -22,7 +22,7 @@ const SeatContextProvider = (props) => {
     screeningId: "",
     movieName: "",
     hallName: "",
-    startDate: 0,
+    dateAndTimeInfoStr: "",
     clearSeats: clearSeats
   };
 

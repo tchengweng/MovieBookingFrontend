@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Card from "../UI/Card";
+import classes from "./MovieDetails.module.css";
+import linkClasses from "../CommonStyles/link.module.css";
 
 const MovieDetails = (props) => {
   let hour = 0;
@@ -39,21 +41,26 @@ const MovieDetails = (props) => {
 
         let endDate = new Date(screening.endTime);
         let endDateStr = endDate.toLocaleString("en-UK", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
           hour: "numeric",
           minute: "numeric",
           hour12: true,
         });
 
+        let hallName = props.halls.find(
+          (hall) => hall.id === screening.hallId
+        ).name;
+
         return (
-          <li key={screening.id}>
-            <p>{screening.movieId}</p>
-            <p>{screening.hallId}</p>
-            <p>{startDateStr}</p>
-            <p>{endDateStr}</p>
-            <Link to={`/AllMovies/${screening.id}`}>
+          <li key={screening.id} className={classes.li}>
+            <h3>Hall: {hallName}</h3>
+            <h3>
+              {startDateStr} - {endDateStr}
+            </h3>
+            <Link
+              style={{ textDecoration: "none" }}
+              className={linkClasses.Link}
+              to={`/AllMovies/${screening.id}`}
+            >
               Book Tickets
             </Link>
           </li>

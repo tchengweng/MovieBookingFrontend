@@ -1,16 +1,3 @@
-.li {
-    border-radius: 2px;
-    background-color: rgb(212, 105, 105);
-    padding: 1rem; 
-
-    margin: 3rem auto;
-    width: 90%;
-    max-width: 80rem;
-    text-align: center;
-
-    list-style-type: none;
-}
-
 .Link{
     color: white;
     cursor: pointer;

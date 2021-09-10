@@ -1,6 +1,5 @@
 import useInput from "../Hooks/useInput";
-
-const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+import classes from "./InputForm.module.css";
 
 const InputForm = (props) => {
   const {
@@ -19,7 +18,7 @@ const InputForm = (props) => {
     valueChangeHandler: emailChangedHandler,
     valueBlurHandler: emailBlurHandler,
     reset: resetEmailInput,
-  } = useInput((value) => value.match(validRegex));
+  } = useInput((value) => /\S+@\S+\.\S+/.test(value));
 
   let formIsValid = false;
 
@@ -34,24 +33,16 @@ const InputForm = (props) => {
       return;
     }
 
-    props.submitFormHandler(enteredName,enteredEmail);
+    props.submitFormHandler(enteredName, enteredEmail);
 
     resetNameInput();
     resetEmailInput();
   };
 
-  const nameInputClasses = nameInputHasError
-    ? "form-control invalid"
-    : "form-control";
-
-  const emailInputClasses = emailInputHasError
-    ? "form-control invalid"
-    : "form-control";
-
   return (
-    <form onSubmit={formSubmissionHandler}>
-      <div className={nameInputClasses}>
-        <label htmlFor="name">Last Name</label>
+    <form onSubmit={formSubmissionHandler} className={classes.form}>
+      <div>
+        <label htmlFor="name">Name: </label>
         <input
           type="text"
           id="name"
@@ -59,23 +50,28 @@ const InputForm = (props) => {
           onBlur={nameBlurHandler}
           value={enteredName}
         />
+        <p></p>
         {nameInputHasError && (
           <p className="error-text">Name must not be empty.</p>
         )}
       </div>
-      <div className={emailInputClasses}>
-        <label htmlFor="name">E-Mail Address</label>
+      <div>
+        <label htmlFor="name">E-Mail Address: </label>
         <input
-          type="text"
-          id="name"
+          type="email"
+          id="email"
           onChange={emailChangedHandler}
           onBlur={emailBlurHandler}
           value={enteredEmail}
         />
+        <p></p>
         {emailInputHasError && <p className="error-text">Email is invalid.</p>}
       </div>
       <div className="form-actions">
-        <button disabled={!formIsValid}>Submit</button>
+        <p></p>
+        <button className={classes.button} disabled={!formIsValid}>
+          Submit
+        </button>
       </div>
     </form>
   );

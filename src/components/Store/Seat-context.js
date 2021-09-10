@@ -5,7 +5,7 @@ const SeatContext = React.createContext({
   screeningId: "",
   movieName: "",
   hallName: "",
-  startDate: 0,
+  dateAndTimeInfoStr: "",
   clearSeats: () => {}
 });
 

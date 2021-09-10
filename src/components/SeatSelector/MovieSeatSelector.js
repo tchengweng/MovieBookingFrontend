@@ -1,7 +1,8 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import MovieSeat from "./MovieSeat";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 import SeatContext from "../Store/Seat-context";
+import classes from "./MovieSeatSelector.module.css";
 
 const GetSeatMatrix = (hallDetails) => {
   let seatIds = Array.from(Array(hallDetails.seatCapacity).keys());
@@ -24,9 +25,9 @@ const MovieSeatSelector = (props) => {
     console.log(seatId);
     const isSelected = seatsChosen.includes(seatId);
     if (isSelected) {
-      setSeatsChosen(seatsChosen.filter(
-        (selectedSeat) => selectedSeat !== seatId
-      ));
+      setSeatsChosen(
+        seatsChosen.filter((selectedSeat) => selectedSeat !== seatId)
+      );
     } else {
       setSeatsChosen([...seatsChosen, seatId]);
     }
@@ -35,10 +36,30 @@ const MovieSeatSelector = (props) => {
   const reserveSeatHandler = () => {
     seatCtx.seats = seatsChosen;
     seatCtx.screeningId = props.screeningDetails.id;
+    seatCtx.movieName = props.movieDetails.name;
+    seatCtx.hallName = props.hallDetails.name;
+
+    let startDate = new Date(props.screeningDetails.startTime);
+    let startDateStr = startDate.toLocaleString("en-UK", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
+    let endDate = new Date(props.screeningDetails.endTime);
+    let endDateStr = endDate.toLocaleString("en-UK", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
+    seatCtx.dateAndTimeInfoStr = startDateStr + " - " + endDateStr;
     history.push({
       pathname: "/Reserve",
     });
-    //sendReserveSeatsRequest(name, email);
   };
 
   let seatsChosenSorted = seatsChosen
@@ -50,7 +71,8 @@ const MovieSeatSelector = (props) => {
 
   return (
     <div>
-      <p>Hall: {props.hallDetails.name}</p>
+      <h1>{props.movieDetails.name}</h1>
+      <h3>Hall: {props.hallDetails.name}</h3>
       {seatsMatrix.map((seatsColArray) => {
         return (
           <div key={seatsColArray[0]}>
@@ -77,12 +99,15 @@ const MovieSeatSelector = (props) => {
         );
       })}
       <div>
-        <p>Screen Here</p>
+        <h1>Screen</h1>
       </div>
       {seatsChosen.length > 0 && (
         <div>
+          <h3>Seats Selected</h3>
           <p>{seatsChosenSorted}</p>
-          <button onClick={reserveSeatHandler}>submit</button>
+          <button className={classes.button} onClick={reserveSeatHandler}>
+            Reserve
+          </button>
         </div>
       )}
     </div>

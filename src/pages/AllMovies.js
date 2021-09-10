@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useCallback, useEffect,useContext } from "react";
+import React, {
+  Fragment,
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+} from "react";
 import MovieSldier from "../components/Movie/MovieSlider";
 import MovieDetails from "../components/Movie/MovieDetails";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
@@ -12,13 +18,16 @@ const AllMovies = () => {
   const [screenings, setScreenings] = useState([]);
   const [isScreeningsLoaded, setIsScreeningsLoaded] = useState(false);
 
+  const [halls, setHalls] = useState([]);
+  const [isHallsLoaded, setIsHallsLoaded] = useState(false);
+
   const [currMovId, setCurrMovId] = useState(0);
 
   const seatCtx = useContext(SeatContext);
 
   const fetchMoviesHandler = useCallback(async () => {
     let returnData = await sendRequestGET(
-      "https://movie-booking-backend-cw.herokuapp.com/AllMovies",
+      "https://movie-booking-backend-cw.herokuapp.com/AllMovies"
     );
     if (returnData !== "Error") {
       const loadedMovies = [];
@@ -40,9 +49,8 @@ const AllMovies = () => {
   }, []);
 
   const fetchScreeningsHandler = useCallback(async () => {
-
     let returnData = await sendRequestGET(
-      "https://movie-booking-backend-cw.herokuapp.com/AllScreenings",
+      "https://movie-booking-backend-cw.herokuapp.com/AllScreenings"
     );
     if (returnData !== "Error") {
       const loadedScreenings = [];
@@ -65,14 +73,39 @@ const AllMovies = () => {
     }
   }, []);
 
+  const fetchHallsHandler = useCallback(async () => {
+    let returnData = await sendRequestGET(
+      "https://movie-booking-backend-cw.herokuapp.com/AllHalls"
+    );
+    if (returnData !== "Error") {
+      const loadedHalls = [];
+
+      for (const index in returnData.payload) {
+        loadedHalls.push({
+          id: returnData.payload[index].id,
+          name: returnData.payload[index].name,
+          seatCapacity: returnData.payload[index].seatCapacity,
+          row: returnData.payload[index].row,
+          col: returnData.payload[index].col,
+        });
+      }
+
+      setHalls(loadedHalls);
+      setIsHallsLoaded(true);
+    } else {
+      console.log("Error!");
+    }
+  }, []);
+
   useEffect(() => {
     fetchMoviesHandler();
     fetchScreeningsHandler();
+    fetchHallsHandler();
     seatCtx.clearSeats();
     console.log(seatCtx);
-  }, [fetchMoviesHandler, fetchScreeningsHandler,seatCtx]);
+  }, [fetchMoviesHandler, fetchScreeningsHandler, fetchHallsHandler, seatCtx]);
 
-  if (!isMoviesLoaded || !isScreeningsLoaded) {
+  if (!isMoviesLoaded || !isScreeningsLoaded || !isHallsLoaded) {
     return (
       <div className="centered">
         <LoadingSpinner></LoadingSpinner>
@@ -92,6 +125,7 @@ const AllMovies = () => {
         movies={movies}
         currMovId={currMovId}
         screenings={screenings}
+        halls={halls}
       ></MovieDetails>
     </Fragment>
   );

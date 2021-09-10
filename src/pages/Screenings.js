@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect,useContext } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import Card from "../components/UI/Card";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import MovieSeatSelector from "../components/SeatSelector/MovieSeatSelector";
 import { sendRequestPOST } from "../components/Requests/RequestAPIs";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 import SeatContext from "../components/Store/Seat-context";
 
 const Screenings = (props) => {
@@ -17,6 +17,9 @@ const Screenings = (props) => {
 
   const [hallDetails, setHallDetails] = useState([]);
   const [isHallDetailsLoaded, setIsHallDetailsLoaded] = useState(false);
+
+  const [movieDetails, setMovieDetails] = useState([]);
+  const [isMovieDetailsLoaded, setIsMovieDetailsLoaded] = useState(false);
 
   const seatCtx = useContext(SeatContext);
 
@@ -33,7 +36,7 @@ const Screenings = (props) => {
     if (returnData !== "Error") {
       if (returnData.status !== "query success") {
         history.push({
-          pathname: "/AllMovies"
+          pathname: "/AllMovies",
         });
       } else {
         console.log(returnData.payload);
@@ -43,7 +46,7 @@ const Screenings = (props) => {
     } else {
       console.log("Error!");
     }
-  }, [screeningId,history]);
+  }, [screeningId, history]);
 
   const fetchHallDetails = useCallback(async () => {
     let requestBody = { screeningId: screeningId };
@@ -57,7 +60,7 @@ const Screenings = (props) => {
     if (returnData !== "Error") {
       if (returnData.status !== "query success") {
         history.push({
-          pathname: "/AllMovies"
+          pathname: "/AllMovies",
         });
       } else {
         console.log(returnData.payload);
@@ -67,21 +70,46 @@ const Screenings = (props) => {
     } else {
       console.log("Error!");
     }
-  }, [screeningId,history]);
+  }, [screeningId, history]);
 
+  const fetchMovieDetail = useCallback(async () => {
+    let requestBody = { screeningId: screeningId };
+    let returnData = await sendRequestPOST(
+      "https://movie-booking-backend-cw.herokuapp.com/MovieByScreeningId",
+      requestBody
+    );
+
+    console.log(returnData);
+
+    if (returnData !== "Error") {
+      if (returnData.status !== "query success") {
+        history.push({
+          pathname: "/AllMovies",
+        });
+      } else {
+        console.log(returnData.payload);
+        setMovieDetails(returnData.payload);
+        setIsMovieDetailsLoaded(true);
+      }
+    } else {
+      console.log("Error!");
+    }
+  }, [screeningId, history]);
 
   //Load initial data
   useEffect(() => {
     setIsScreeningLoaded(false);
     setIsHallDetailsLoaded(false);
+    setIsMovieDetailsLoaded(false);
     fetchScreeningDetails();
     fetchHallDetails();
+    fetchMovieDetail();
     seatCtx.clearSeats();
     console.log("gettinging movie details!");
-  }, [fetchScreeningDetails, fetchHallDetails,seatCtx]);
+  }, [fetchScreeningDetails, fetchHallDetails, fetchMovieDetail,seatCtx]);
 
   //Display loading spinner if data is not fully loaded
-  if (!isScreeningLoaded || !isHallDetailsLoaded) {
+  if (!isScreeningLoaded || !isHallDetailsLoaded || !isMovieDetailsLoaded) {
     return (
       <div className="centered">
         <LoadingSpinner></LoadingSpinner>
@@ -94,6 +122,7 @@ const Screenings = (props) => {
       <MovieSeatSelector
         hallDetails={hallDetails}
         screeningDetails={screening}
+        movieDetails={movieDetails}
       ></MovieSeatSelector>
     </Card>
   );
