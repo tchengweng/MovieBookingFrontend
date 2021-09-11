@@ -3,10 +3,10 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 import LoadingSpinner from "./components/Layout/LoadingSpinner";
-import Reserve from "./Pages/Reserve";
+import Reserve from "./pages/Reserve";
 
-const AllMovies = React.lazy(() => import("./Pages/AllMovies"));
-const Screenings = React.lazy(() => import("./Pages/Screenings"));
+const AllMovies = React.lazy(() => import("./pages/AllMovies"));
+const Screenings = React.lazy(() => import("./pages/Screenings"));
 
 function App() {
   return (
