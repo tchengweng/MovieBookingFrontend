@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import SeatContext from "../Store/Seat-context";
 import classes from "./MovieSeatSelector.module.css";
 
+//Get 2d array of seat index from hall details
 const GetSeatMatrix = (hallDetails) => {
   let seatIds = Array.from(Array(hallDetails.seatCapacity).keys());
   const seatsSplitArray = [];
@@ -21,8 +22,8 @@ const MovieSeatSelector = (props) => {
   const [seatsChosen, setSeatsChosen] = useState([]);
   const seatsMatrix = GetSeatMatrix(props.hallDetails);
 
+  //Manage seat chosen array
   const setSeatHandler = (seatId) => {
-    console.log(seatId);
     const isSelected = seatsChosen.includes(seatId);
     if (isSelected) {
       setSeatsChosen(
@@ -62,6 +63,7 @@ const MovieSeatSelector = (props) => {
     });
   };
 
+  //Sort seats chosen
   let seatsChosenSorted = seatsChosen
     .map(function (x) {
       return parseInt(x + 1);
@@ -69,6 +71,7 @@ const MovieSeatSelector = (props) => {
     .sort((a, b) => a - b)
     .toString();
 
+  //Display seat matrix and only render "Reserve" button if there is at least one seat chosen.
   return (
     <div>
       <h1>{props.movieDetails.name}</h1>

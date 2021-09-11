@@ -1,15 +1,17 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import Card from "../UI/Card";
+import Card from "../Layout/Card";
 import classes from "./MovieDetails.module.css";
 import linkClasses from "../CommonStyles/link.module.css";
 
+//Display movie details - movie details and screening details
 const MovieDetails = (props) => {
   let hour = 0;
   let minute = 0;
 
   let duration = "";
 
+  //Get movie runtime in hours and minutes
   if (props.isLoaded) {
     hour = +props.movies[props.currMovId].length / 60;
     hour = Math.floor(hour);
@@ -18,7 +20,7 @@ const MovieDetails = (props) => {
     duration = hour + "H " + minute + "M";
   }
 
-  //Get screenings
+  //Display screening details
   let screeningDetails = "";
   if (props.isLoaded) {
     screeningDetails = props.screenings

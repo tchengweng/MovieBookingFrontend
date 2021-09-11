@@ -5,9 +5,9 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import MovieSldier from "../components/Movie/MovieSlider";
-import MovieDetails from "../components/Movie/MovieDetails";
-import LoadingSpinner from "../components/UI/LoadingSpinner";
+import MovieSldier from "../components/MovieDisplay/MovieSlider";
+import MovieDetails from "../components/MovieDisplay/MovieDetails";
+import LoadingSpinner from "../components/Layout/LoadingSpinner";
 import { sendRequestGET } from "../components/Requests/RequestAPIs";
 import SeatContext from "../components/Store/Seat-context";
 
@@ -97,14 +97,18 @@ const AllMovies = () => {
     }
   }, []);
 
+    //Load initial data
   useEffect(() => {
+    setIsMoviesLoaded(false);
+    setIsScreeningsLoaded(false);
+    setIsHallsLoaded(false);
     fetchMoviesHandler();
     fetchScreeningsHandler();
     fetchHallsHandler();
     seatCtx.clearSeats();
-    console.log(seatCtx);
   }, [fetchMoviesHandler, fetchScreeningsHandler, fetchHallsHandler, seatCtx]);
 
+    //Display loading spinner if data is not fully loaded
   if (!isMoviesLoaded || !isScreeningsLoaded || !isHallsLoaded) {
     return (
       <div className="centered">

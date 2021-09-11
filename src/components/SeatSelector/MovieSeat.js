@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./MovieSeat.module.css";
 
+//Movie seat, display different colour for each seat status
 const MovieSeat = (props) => {
   let style = classes.seatEmpty;
 

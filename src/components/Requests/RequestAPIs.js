@@ -1,3 +1,4 @@
+//Generic functions for sending http request
 export const sendRequestPOST = async (url, body) => {
   try {
     const response = await fetch(url, {

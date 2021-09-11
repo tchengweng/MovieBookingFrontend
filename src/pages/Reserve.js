@@ -1,10 +1,10 @@
 import React, { useContext, useCallback, useState } from "react";
-import Card from "../components/UI/Card";
+import Card from "../components/Layout/Card";
 import InputForm from "../components/Forms/InputForm";
 import { sendRequestPOST } from "../components/Requests/RequestAPIs";
 import SeatContext from "../components/Store/Seat-context";
 import { Fragment } from "react/cjs/react.production.min";
-import LoadingSpinner from "../components/UI/LoadingSpinner";
+import LoadingSpinner from "../components/Layout/LoadingSpinner";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import linkClasses from "../components/CommonStyles/link.module.css";
@@ -15,6 +15,7 @@ const ReserveSeatStatus = {
   ERROR: "ERROR",
 };
 
+//Create response msg after sending reserve seat
 const CreateLink = (reserveSeatStatus) => {
   let msg = "";
   let linkMsg = "";
@@ -69,8 +70,6 @@ const Reserve = (props) => {
     dateAndTimeInfoStr,
   } = seatCtx;
 
-  console.log(seatCtx);
-
   if (seatsChosen === [] || screeningId === "") {
     history.push({
       pathname: "/AllMovies",
@@ -90,7 +89,6 @@ const Reserve = (props) => {
         screeningId: screeningId,
       };
 
-      console.log(requestBody);
       setSubmitedForm(true);
       let returnData = await sendRequestPOST(
         "https://movie-booking-backend-cw.herokuapp.com/ReserveSeats",
@@ -98,7 +96,6 @@ const Reserve = (props) => {
       );
 
       if (returnData !== "Error") {
-        console.log(returnData);
         if (returnData.payload === "Seats Reserved") {
           setReserveState(ReserveSeatStatus.RESERVED);
         }
@@ -128,6 +125,8 @@ const Reserve = (props) => {
     .sort((a, b) => a - b)
     .toString();
 
+  //display input form
+  //Create resposnse component with status msg after sending request
   return (
     <Card>
       {!submitedForm && (

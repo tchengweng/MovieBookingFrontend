@@ -1,6 +1,7 @@
 import useInput from "../Hooks/useInput";
 import classes from "./InputForm.module.css";
 
+//Simple input form for name and email
 const InputForm = (props) => {
   const {
     value: enteredName,

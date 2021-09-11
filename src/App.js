@@ -2,12 +2,11 @@ import React, { Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
-import LoadingSpinner from "./components/UI/LoadingSpinner";
-import Reserve from "./pages/Reserve";
+import LoadingSpinner from "./components/Layout/LoadingSpinner";
+import Reserve from "./Pages/Reserve";
 
-const AllMovies = React.lazy(() => import("./pages/AllMovies"));
-const InvalidPath = React.lazy(() => import("./pages/InvalidPath"));
-const Screenings = React.lazy(() => import("./pages/Screenings"));
+const AllMovies = React.lazy(() => import("./Pages/AllMovies"));
+const Screenings = React.lazy(() => import("./Pages/Screenings"));
 
 function App() {
   return (
@@ -33,7 +32,7 @@ function App() {
             <Reserve />
           </Route>
           <Route path="*">
-            <InvalidPath></InvalidPath>
+            <Redirect to="/AllMovies"></Redirect>
           </Route>
         </Switch>
       </Suspense>

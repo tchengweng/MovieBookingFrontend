@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+//Custom hook for checking and validating input value
 const useInput = (validateValue) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);

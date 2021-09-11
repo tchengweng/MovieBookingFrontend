@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
 import HeaderButton from "./HeaderButton";
-import classes from "./MainNavigation.module.css";
+import classes from "./Header.module.css";
 
-const MainNavigation = () => {
+//Header on top of the website
+const Header = () => {
   return (
     <header className={classes.header}>
       <div className={classes.logo}>CW Movie Booking</div>
@@ -19,4 +20,4 @@ const MainNavigation = () => {
   );
 };
 
-export default MainNavigation;
+export default Header;

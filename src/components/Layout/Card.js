@@ -1,5 +1,6 @@
 import classes from "./Card.module.css";
 
+//Layout wrapper around components
 const Card = (props) => {
   return (
     <section

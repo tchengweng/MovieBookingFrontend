@@ -8,6 +8,7 @@ const defaultSeatState = {
     dateAndTimeInfoStr: "",
 };
 
+//Reserve seat context, used for saving movie,screening and seats chosen
 const SeatContextProvider = (props) => {
   const clearSeats = () => {
     seatContext.seats = defaultSeatState.seats;

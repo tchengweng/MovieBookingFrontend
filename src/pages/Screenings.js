@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import Card from "../components/UI/Card";
+import Card from "../components/Layout/Card";
 import { useParams } from "react-router-dom";
-import LoadingSpinner from "../components/UI/LoadingSpinner";
+import LoadingSpinner from "../components/Layout/LoadingSpinner";
 import MovieSeatSelector from "../components/SeatSelector/MovieSeatSelector";
 import { sendRequestPOST } from "../components/Requests/RequestAPIs";
 import { useHistory } from "react-router";
@@ -39,7 +39,6 @@ const Screenings = (props) => {
           pathname: "/AllMovies",
         });
       } else {
-        console.log(returnData.payload);
         setScreening(returnData.payload);
         setIsScreeningLoaded(true);
       }
@@ -55,15 +54,12 @@ const Screenings = (props) => {
       requestBody
     );
 
-    console.log(returnData);
-
     if (returnData !== "Error") {
       if (returnData.status !== "query success") {
         history.push({
           pathname: "/AllMovies",
         });
       } else {
-        console.log(returnData.payload);
         setHallDetails(returnData.payload);
         setIsHallDetailsLoaded(true);
       }
@@ -78,16 +74,12 @@ const Screenings = (props) => {
       "https://movie-booking-backend-cw.herokuapp.com/MovieByScreeningId",
       requestBody
     );
-
-    console.log(returnData);
-
     if (returnData !== "Error") {
       if (returnData.status !== "query success") {
         history.push({
           pathname: "/AllMovies",
         });
       } else {
-        console.log(returnData.payload);
         setMovieDetails(returnData.payload);
         setIsMovieDetailsLoaded(true);
       }
@@ -105,7 +97,6 @@ const Screenings = (props) => {
     fetchHallDetails();
     fetchMovieDetail();
     seatCtx.clearSeats();
-    console.log("gettinging movie details!");
   }, [fetchScreeningDetails, fetchHallDetails, fetchMovieDetail,seatCtx]);
 
   //Display loading spinner if data is not fully loaded
